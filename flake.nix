@@ -9,7 +9,7 @@
         nixpkgs.lib.genAttrs [
           "x86_64-linux"
         ] (system: function nixpkgs.legacyPackages.${system});
-    in {
+    in rec {
       packages = forAllSystems (pkgs: {
         default = pkgs.callPackage ./package.nix {};
       });
