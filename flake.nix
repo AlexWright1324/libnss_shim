@@ -5,24 +5,16 @@
   };
   
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let 
-        pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
-        packages.default = pkgs.rustPlatform.buildRustPackage rec {
-          name = "libnss_shim";
+    let
+      forAllSystems = function:
+        nixpkgs.lib.genAttrs [
+          "x86_64-linux"
+        ] (system: function nixpkgs.legacyPackages.${system});
+    in {
+      packages = forAllSystems (pkgs: {
+        default = pkgs.callPackage ./package.nix {};
+      });
 
-          src = pkgs.fetchFromGitHub {
-            owner = "xenago";
-            repo = name;
-            rev = "f9f8bb7";
-            sha256 = "sha256-kTZoBpQH7KbmkKrpgt9Ou9/d35rIi3PA0LOgB2kg1FA=";
-          };
-
-          cargoHash = "sha256-aZRu9MpU8oYeFMMzDWAvor8yAYZkXDe81GMt29ewcqs=";
-        };
-      }
-    ) // {
       nixosModules.default = { config, lib, pkgs, ... }:
         with lib;
         let 
