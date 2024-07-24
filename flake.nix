@@ -36,8 +36,8 @@
             config = mkIf cfg.enable {
               system.nssModules = with pkgs; [ perSystem.config.packages.default ];
               system.nssDatabases = {
+                group = mkAfter ["shim"];
                 passwd = mkAfter ["shim"];
-                shadow = mkAfter ["shim"];
               };
               environment.etc."libnss_shim/config.json" = {
                 text = builtins.toJSON cfg.configJson;
