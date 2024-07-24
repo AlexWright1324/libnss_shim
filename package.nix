@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   postInstall = ''
-    mv "$out/libnss_shim.so" "$out/libnss_shim.so.2"
+    mv "$out/lib/libnss_shim.so" "$out/lib/libnss_shim.so.2"
   '';
 
   cargoHash = "sha256-aZRu9MpU8oYeFMMzDWAvor8yAYZkXDe81GMt29ewcqs=";
